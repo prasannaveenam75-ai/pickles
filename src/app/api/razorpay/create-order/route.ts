@@ -7,10 +7,14 @@ import { validateCoupon } from "@/lib/services/coupon";
 import { generateOrderNumber } from "@/lib/utils";
 import Razorpay from "razorpay";
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || "",
-  key_secret: process.env.RAZORPAY_KEY_SECRET || "",
-});
+function getRazorpay(): Razorpay {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) {
+    throw new Error("RAZORPAY not configured");
+  }
+  return new Razorpay({ key_id: keyId, key_secret: keySecret });
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -72,13 +76,14 @@ export async function POST(request: NextRequest) {
     const deliveryCharge = await calculateServerDelivery(totalWeight);
     const grandTotal = afterDiscount + deliveryCharge;
 
+    const orderNumber = generateOrderNumber();
+    const razorpay = getRazorpay();
     const razorpayOrder = await razorpay.orders.create({
       amount: Math.round(grandTotal * 100),
       currency: "INR",
       receipt: `rcpt_${Date.now()}`,
     });
 
-    const orderNumber = generateOrderNumber();
     const order = await Order.create({
       orderNumber,
       customer: { name: shippingAddress.fullName, phone: shippingAddress.phone, email: shippingAddress.email },
