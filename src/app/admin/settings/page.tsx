@@ -36,6 +36,7 @@ export default function AdminSettingsPage() {
           fssaiNumber: settings.fssaiNumber,
           gstNumber: settings.gstNumber,
           logo: settings.logo,
+          instagramUrl: settings.instagramUrl,
         }),
       });
       setSaved(true);
@@ -96,6 +97,11 @@ export default function AdminSettingsPage() {
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium mb-1">Logo URL</label>
             <input type="text" value={settings.logo} onChange={(e) => updateField("logo", e.target.value)} className="admin-input" placeholder="Cloudinary or image URL" />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-sm font-medium mb-1">Instagram URL</label>
+            <input type="url" value={settings.instagramUrl || ""} onChange={(e) => updateField("instagramUrl", e.target.value)} className="admin-input" placeholder="https://www.instagram.com/devipickles/" />
+            <p className="text-xs text-gray-500 mt-1.5">Shows the "Follow Us On Instagram" button under the video testimonials. Leave empty to hide it.</p>
           </div>
         </div>
       </div>

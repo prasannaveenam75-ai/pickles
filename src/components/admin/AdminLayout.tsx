@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   LayoutDashboard, Package, List, ShoppingBag, Users, MessageSquare,
   Home, Tag, Truck, CreditCard, MessageCircle, Image, HelpCircle,
-  Settings, LogOut, X, Menu as MenuIcon,
+  Settings, LogOut, X, Menu as MenuIcon, Quote,
 } from "lucide-react";
 
 const navItems = [
@@ -16,6 +16,7 @@ const navItems = [
   { href: "/admin/categories", label: "Categories", icon: List },
   { href: "/admin/customers", label: "Customers", icon: Users },
   { href: "/admin/reviews", label: "Reviews", icon: MessageSquare },
+  { href: "/admin/testimonials", label: "Testimonials", icon: Quote },
   { href: "/admin/homepage", label: "Homepage", icon: Home },
   { href: "/admin/coupons", label: "Coupons", icon: Tag },
   { href: "/admin/delivery", label: "Delivery Settings", icon: Truck },

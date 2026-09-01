@@ -8,35 +8,42 @@ import WhyChooseUs from "@/components/sections/WhyChooseUs";
 import PickleExperience from "@/components/sections/PickleExperience";
 import NonVegSection from "@/components/sections/NonVegSection";
 import PowdersSection from "@/components/sections/PowdersSection";
-import CustomerReviews from "@/components/sections/CustomerReviews";
+import TestimonialsSection from "@/components/sections/TestimonialsSection";
+import VideoTestimonialsSection from "@/components/sections/VideoTestimonialsSection";
 import SocialGallery from "@/components/sections/SocialGallery";
 import FAQSection from "@/components/sections/FAQSection";
 import FinalCTA from "@/components/sections/FinalCTA";
 import FeaturedProducts from "@/components/sections/FeaturedProducts";
 import { connectToDatabase } from "@/lib/mongodb";
-import { Category, Homepage, Product, Review, FAQ } from "@/lib/models";
+import { Category, Homepage, Product, Testimonial, SiteSettings, FAQ } from "@/lib/models";
 import { serialize } from "@/lib/utils/serialize";
 
 export const revalidate = 300;
 
 export default async function HomePage() {
-  let categories: any[] = [], bestSellers: any[] = [], reviews: any[] = [], faqs: any[] = [], featured: any[] = [];
+  let categories: any[] = [], bestSellers: any[] = [], faqs: any[] = [], featured: any[] = [];
+  let writtenTestimonials: any[] = [], videoTestimonials: any[] = [];
+  let instagramUrl = "";
   let hc: Record<string, any> = {};
   try {
     await connectToDatabase();
 
-    const [cats, sellers, revs, fqs, homepageData] = await Promise.all([
+    const [cats, sellers, fqs, homepageData, writtenT, videoT, settings] = await Promise.all([
       Category.find({ active: true }).sort({ displayOrder: 1 }).lean(),
       Product.find({ active: true, bestSeller: true }).limit(8).lean(),
-      Review.find({ published: true }).sort({ createdAt: -1 }).limit(6).lean(),
       FAQ.find({ active: true }).sort({ displayOrder: 1 }).limit(6).lean(),
       Homepage.findOne().lean(),
+      Testimonial.find({ active: true, type: "written" }).sort({ displayOrder: 1, createdAt: -1 }).limit(10).lean(),
+      Testimonial.find({ active: true, type: { $in: ["instagram", "uploaded"] } }).sort({ displayOrder: 1, createdAt: -1 }).limit(6).lean(),
+      SiteSettings.findOne().lean(),
     ]);
 
     categories = cats;
     bestSellers = sellers;
-    reviews = revs;
     faqs = fqs;
+    writtenTestimonials = writtenT;
+    videoTestimonials = videoT;
+    instagramUrl = (settings as any)?.instagramUrl || "";
     hc = serialize((homepageData as Record<string, any>) || {});
     const featuredIds = hc.featuredProducts || [];
     featured = featuredIds.length
@@ -90,7 +97,18 @@ export default async function HomePage() {
         ctaText={hc.powdersSection?.ctaText}
         ctaUrl={hc.powdersSection?.ctaUrl}
       />
-      <CustomerReviews reviews={serialize(reviews)} />
+      {writtenTestimonials.length > 0 && (
+        <TestimonialsSection testimonials={serialize(writtenTestimonials)} />
+      )}
+      {videoTestimonials.length > 0 && (
+        <VideoTestimonialsSection
+          videos={serialize(videoTestimonials)}
+          featuredQuote={
+            serialize(writtenTestimonials).find((t: any) => t.featured) || null
+          }
+          instagramUrl={instagramUrl}
+        />
+      )}
       <SocialGallery images={hc.socialGallery} />
       <FAQSection
         faqs={faqs?.map((f: any) => ({ _id: f._id?.toString(), question: f.question, answer: f.answer }))}

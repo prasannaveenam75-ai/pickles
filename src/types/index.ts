@@ -126,6 +126,33 @@ export interface IReview {
   updatedAt: string;
 }
 
+export interface ITestimonial {
+  _id: string;
+  type: "written" | "instagram" | "uploaded";
+  customerName: string;
+  customerLocation: string;
+  customerImage?: string;
+  productId?: string;
+  productName?: string;
+  rating: number;
+  reviewText: string;
+  instagramUrl?: string;
+  instagramCode?: string;
+  videoUrl?: string;
+  thumbnailUrl?: string;
+  videoPublicId?: string;
+  videoDuration?: number;
+  videoAspect?: string;
+  caption: string;
+  verified: boolean;
+  featured: boolean;
+  active: boolean;
+  displayOrder: number;
+  isDemo: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ICoupon {
   _id: string;
   code: string;

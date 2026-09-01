@@ -8,6 +8,7 @@ export interface ISiteSettingsDoc extends Document {
   email: string;
   fssaiNumber: string;
   gstNumber?: string;
+  instagramUrl?: string;
   logo: string;
   favicon: string;
   deliveryRatePerKg: number;
@@ -28,6 +29,7 @@ const SiteSettingsSchema = new Schema<ISiteSettingsDoc>(
     email: { type: String, default: "" },
     fssaiNumber: { type: String, default: "" },
     gstNumber: { type: String, default: "" },
+    instagramUrl: { type: String, default: "" },
     logo: { type: String, default: "" },
     favicon: { type: String, default: "" },
     deliveryRatePerKg: { type: Number, default: 100 },

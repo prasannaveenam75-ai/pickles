@@ -1,6 +1,6 @@
 import StorefrontLayout from "@/components/layout/StorefrontLayout";
 import { connectToDatabase } from "@/lib/mongodb";
-import { Product } from "@/lib/models";
+import { Product, Testimonial } from "@/lib/models";
 import { notFound } from "next/navigation";
 import { serialize } from "@/lib/utils/serialize";
 import ProductDetailClient from "./ProductDetailClient";
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  let product: any, related: any;
+  let product: any, related: any, testimonials: any = [];
   try {
     await connectToDatabase();
     product = await Product.findOne({ slug, active: true }).lean();
@@ -43,6 +43,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       _id: { $ne: product._id },
       active: true,
     }).limit(4).lean();
+    testimonials = await Testimonial.find({
+      productId: (product as any)._id,
+      active: true,
+    }).sort({ displayOrder: 1, createdAt: -1 }).limit(4).lean();
   } catch {
     related = [];
     if (!product) notFound();
@@ -53,6 +57,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <ProductDetailClient
         product={serialize(product)}
         related={serialize(related || [])}
+        testimonials={serialize(testimonials || [])}
       />
     </StorefrontLayout>
   );

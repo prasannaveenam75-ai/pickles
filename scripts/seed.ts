@@ -559,6 +559,114 @@ const demoReviews = [
   { customerName: "Suresh Naidu", rating: 4, review: "Mutton pickle is rich and delicious. Slightly more oil than I expected, but the flavour more than makes up for it. Will reorder.", location: "Pune, Maharashtra", published: true, featured: false },
 ];
 
+const demoTestimonials = [
+  {
+    type: "written" as const,
+    slug: "andhra-mango-pickle",
+    customerName: "Ananya Reddy",
+    customerLocation: "Bengaluru",
+    rating: 5,
+    reviewText: "Absolutely loved the taste! It reminded me of the homemade mango pickle we used to have at home. The spice level and flavour are perfect.",
+    caption: "",
+    featured: true,
+    displayOrder: 1,
+  },
+  {
+    type: "written" as const,
+    slug: "chicken-pickle",
+    customerName: "Rahul Kumar",
+    customerLocation: "Hyderabad",
+    rating: 5,
+    reviewText: "The chicken pickle is amazing. Rich flavour, perfectly spiced and the packaging was excellent. Definitely ordering again.",
+    caption: "",
+    featured: false,
+    displayOrder: 2,
+  },
+  {
+    type: "written" as const,
+    slug: "gongura-pickle",
+    customerName: "Priya Sharma",
+    customerLocation: "Mysuru",
+    rating: 5,
+    reviewText: "The gongura pickle has such an authentic homemade taste. It goes perfectly with rice and ghee.",
+    caption: "",
+    featured: false,
+    displayOrder: 3,
+  },
+  {
+    type: "written" as const,
+    slug: "lemon-pickle",
+    customerName: "Kavitha Nair",
+    customerLocation: "Kochi",
+    rating: 4,
+    reviewText: "Zesty and fresh. Slightly less spicy than I prefer but the tang is lovely. Goes beautifully with parathas and curd rice.",
+    caption: "",
+    featured: false,
+    displayOrder: 4,
+  },
+  {
+    type: "written" as const,
+    slug: "idli-podi",
+    customerName: "Arjun Mehta",
+    customerLocation: "Mumbai",
+    rating: 5,
+    reviewText: "Finally an idli podi that tastes like home. Coarse, aromatic and absolutely perfect with a dab of ghee.",
+    caption: "",
+    featured: false,
+    displayOrder: 5,
+  },
+  {
+    type: "written" as const,
+    slug: "mutton-pickle",
+    customerName: "Deepa Iyer",
+    customerLocation: "Chennai",
+    rating: 5,
+    reviewText: "The mutton pickle is rich and indulgent. You can tell it is made properly, in small batches. Worth every rupee.",
+    caption: "",
+    featured: false,
+    displayOrder: 6,
+  },
+  {
+    type: "instagram" as const,
+    slug: "chicken-pickle",
+    customerName: "Vikram S.",
+    customerLocation: "Vijayawada",
+    rating: 5,
+    reviewText: "",
+    caption: "Sample Testimonial - a customer reel placeholder. This record demonstrates how a real Instagram Reel URL will be embedded when added from the admin panel.",
+    instagramUrl: "https://www.instagram.com/reel/DEMO-REEL-123/",
+    thumbnailUrl: PX(29684985),
+    featured: true,
+    displayOrder: 7,
+  },
+  {
+    type: "uploaded" as const,
+    slug: "andhra-mango-pickle",
+    customerName: "Devi Pickles Team",
+    customerLocation: "Andhra Pradesh",
+    rating: 5,
+    reviewText: "",
+    caption: "Sample Testimonial - demo video file. Replace this with a real customer video upload from the admin panel.",
+    videoUrl: "https://res.cloudinary.com/demo/video/upload/cld-sample-video.mp4",
+    thumbnailUrl: PX(38521742),
+    videoAspect: "16:9",
+    videoDuration: 9,
+    featured: true,
+    displayOrder: 8,
+  },
+  {
+    type: "written" as const,
+    slug: "boneless-chicken-pickle",
+    customerName: "Nitin Rao",
+    customerLocation: "Pune",
+    rating: 5,
+    reviewText: "Boneless chicken pickle is a game changer - same great taste, no hassle. The spice blend is just right.",
+    caption: "",
+    featured: false,
+    displayOrder: 9,
+  },
+];
+
 async function seed() {
   await mongoose.connect(MONGODB_URI);
   console.log("Connected to MongoDB");
@@ -573,6 +681,7 @@ async function seed() {
   const SiteSettings = mongoose.models.SiteSettings || require("../src/lib/models/SiteSettings").default;
   const FAQ = mongoose.models.FAQ || require("../src/lib/models/FAQ").default;
   const Review = mongoose.models.Review || require("../src/lib/models/Review").default;
+  const Testimonial = mongoose.models.Testimonial || require("../src/lib/models/Testimonial").default;
 
   for (const cat of categories) {
     await Category.create(cat);
@@ -597,6 +706,35 @@ async function seed() {
   }
   console.log(`${demoReviews.length} reviews created`);
 
+  const productIdMap = new Map(createdProducts.map((p) => [p.slug, p._id.toString()]));
+  const productNameMap = new Map(products.map((p) => [p.slug, p.name]));
+  for (const t of demoTestimonials) {
+    await Testimonial.create({
+      type: t.type,
+      customerName: t.customerName,
+      customerLocation: t.customerLocation,
+      customerImage: "",
+      productId: productIdMap.get(t.slug) || "",
+      productName: productNameMap.get(t.slug) || "",
+      rating: t.rating,
+      reviewText: t.reviewText,
+      instagramUrl: t.instagramUrl || "",
+      instagramCode: t.instagramUrl ? t.instagramUrl.match(/instagram\.com\/(?:reel|p|tv)\/([A-Za-z0-9_-]+)/)?.[1] || "" : "",
+      videoUrl: t.videoUrl || "",
+      thumbnailUrl: t.thumbnailUrl || "",
+      videoPublicId: "",
+      videoDuration: t.videoDuration ?? undefined,
+      videoAspect: t.videoAspect || "",
+      caption: t.caption,
+      verified: false,
+      featured: Boolean(t.featured),
+      active: true,
+      displayOrder: t.displayOrder,
+      isDemo: true,
+    });
+  }
+  console.log(`${demoTestimonials.length} testimonials created (marked as demo)`);
+
   const hashed = await bcrypt.hash("admin123", 12);
   await Admin.create({
     email: process.env.ADMIN_EMAIL || "admin@devipickles.com",
@@ -613,6 +751,7 @@ async function seed() {
     whatsappNumber: process.env.WHATSAPP_NUMBER || "",
     email: "",
     fssaiNumber: "20126122000228",
+    instagramUrl: "",
     deliveryRatePerKg: 100,
     minimumDeliveryCharge: 100,
     freeDeliveryEnabled: false,

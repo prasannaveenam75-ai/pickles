@@ -7,15 +7,17 @@ import { useRouter } from "next/navigation";
 import { Minus, Plus, ShoppingCart, MessageCircle, Truck, ShieldCheck, Leaf, Heart, Clock } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { StarRating } from "@/components/ui/StarRating";
+import TestimonialQuoteCard from "@/components/ui/TestimonialQuoteCard";
 import { formatPrice } from "@/lib/utils";
 import ProductCard from "@/components/ui/ProductCard";
 
 interface ProductProps {
   product: any;
   related: any[];
+  testimonials?: any[];
 }
 
-export default function ProductDetailClient({ product, related }: ProductProps) {
+export default function ProductDetailClient({ product, related, testimonials = [] }: ProductProps) {
   const router = useRouter();
   const addItem = useCartStore((s) => s.addItem);
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
@@ -308,6 +310,29 @@ export default function ProductDetailClient({ product, related }: ProductProps) 
           </div>
         )}
       </div>
+
+      {testimonials?.length > 0 && (
+        <section className="mb-16">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-3">
+              <span className="font-display text-3xl font-bold text-charcoal-dark">
+                {product.rating || 5}
+              </span>
+              <StarRating rating={Math.round(product.rating || 5)} size="md" />
+              <span className="text-sm text-charcoal-light">
+                {product.reviewCount || 0} verified reviews
+              </span>
+            </div>
+            <h2 className="font-display text-2xl font-bold mt-3">What Our Customers Say</h2>
+            <p className="section-subtitle">Reviews for {product.name}</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {testimonials.map((t: any) => (
+              <TestimonialQuoteCard key={t._id} testimonial={t} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {related?.length > 0 && (
         <div className="mb-16">
