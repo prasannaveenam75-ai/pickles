@@ -8,29 +8,40 @@ import { serialize } from "@/lib/utils/serialize";
 export const revalidate = 300;
 
 export async function generateStaticParams() {
-  await connectToDatabase();
-  const categories = await Category.find({ active: true }).lean();
-  return categories.map((c: any) => ({ slug: c.slug }));
+  try {
+    await connectToDatabase();
+    const categories = await Category.find({ active: true }).lean();
+    return categories.map((c: any) => ({ slug: c.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  await connectToDatabase();
-  const category = await Category.findOne({ slug }).lean();
-  return {
-    title: category?.seoTitle || `${category?.name || "Category"} | Devi Pickles`,
-    description: category?.seoDescription || category?.description || "",
-  };
+  try {
+    await connectToDatabase();
+    const category = await Category.findOne({ slug }).lean();
+    return {
+      title: category?.seoTitle || `${category?.name || "Category"} | Devi Pickles`,
+      description: category?.seoDescription || category?.description || "",
+    };
+  } catch {
+    return { title: "Category | Devi Pickles", description: "" };
+  }
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  await connectToDatabase();
-
-  const category = await Category.findOne({ slug }).lean();
-  if (!category || !category.active) notFound();
-
-  const products = await Product.find({ category: category.name, active: true }).lean();
+  let category: any, products: any[] = [];
+  try {
+    await connectToDatabase();
+    category = await Category.findOne({ slug }).lean();
+    if (!category || !category.active) notFound();
+    products = await Product.find({ category: category.name, active: true }).lean();
+  } catch {
+    notFound();
+  }
 
   return (
     <StorefrontLayout>

@@ -3,14 +3,21 @@ import FAQAccordion from "@/components/ui/FAQAccordion";
 import { connectToDatabase } from "@/lib/mongodb";
 import { FAQ } from "@/lib/models";
 
+export const revalidate = 300;
+
 export const metadata = {
   title: "FAQ",
   description: "Frequently asked questions about Devi Pickles - weights, delivery, tracking, cancellations and more.",
 };
 
 export default async function FAQPage() {
-  await connectToDatabase();
-  const faqs = await FAQ.find({ active: true }).sort({ displayOrder: 1 }).lean();
+  let faqs: any[] = [];
+  try {
+    await connectToDatabase();
+    faqs = await FAQ.find({ active: true }).sort({ displayOrder: 1 }).lean();
+  } catch {
+    // fall through to default FAQs
+  }
 
   const defaultFaqs = [
     {

@@ -20,21 +20,31 @@ import { serialize } from "@/lib/utils/serialize";
 export const revalidate = 300;
 
 export default async function HomePage() {
-  await connectToDatabase();
+  let categories: any[] = [], bestSellers: any[] = [], reviews: any[] = [], faqs: any[] = [], featured: any[] = [];
+  let hc: Record<string, any> = {};
+  try {
+    await connectToDatabase();
 
-  const [categories, bestSellers, reviews, faqs, homepageData] = await Promise.all([
-    Category.find({ active: true }).sort({ displayOrder: 1 }).lean(),
-    Product.find({ active: true, bestSeller: true }).limit(8).lean(),
-    Review.find({ published: true }).sort({ createdAt: -1 }).limit(6).lean(),
-    FAQ.find({ active: true }).sort({ displayOrder: 1 }).limit(6).lean(),
-    Homepage.findOne().lean(),
-  ]);
+    const [cats, sellers, revs, fqs, homepageData] = await Promise.all([
+      Category.find({ active: true }).sort({ displayOrder: 1 }).lean(),
+      Product.find({ active: true, bestSeller: true }).limit(8).lean(),
+      Review.find({ published: true }).sort({ createdAt: -1 }).limit(6).lean(),
+      FAQ.find({ active: true }).sort({ displayOrder: 1 }).limit(6).lean(),
+      Homepage.findOne().lean(),
+    ]);
 
-  const hc = serialize((homepageData as Record<string, any>) || {});
-  const featuredIds = hc.featuredProducts || [];
-  const featured = featuredIds.length
-    ? await Product.find({ _id: { $in: featuredIds }, active: true }).lean()
-    : [];
+    categories = cats;
+    bestSellers = sellers;
+    reviews = revs;
+    faqs = fqs;
+    hc = serialize((homepageData as Record<string, any>) || {});
+    const featuredIds = hc.featuredProducts || [];
+    featured = featuredIds.length
+      ? await Product.find({ _id: { $in: featuredIds }, active: true }).lean()
+      : [];
+  } catch {
+    // DB unavailable — render default sections; ISR revalidates once DB is reachable
+  }
 
   return (
     <StorefrontLayout>

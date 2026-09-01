@@ -13,12 +13,16 @@ export const metadata = {
 };
 
 export default async function ShopPage() {
-  await connectToDatabase();
-
-  const [products, categories] = await Promise.all([
-    Product.find({ active: true }).sort({ featured: -1, createdAt: -1 }).lean(),
-    Category.find({ active: true }).sort({ displayOrder: 1 }).lean(),
-  ]);
+  let products: any[] = [], categories: any[] = [];
+  try {
+    await connectToDatabase();
+    [products, categories] = await Promise.all([
+      Product.find({ active: true }).sort({ featured: -1, createdAt: -1 }).lean(),
+      Category.find({ active: true }).sort({ displayOrder: 1 }).lean(),
+    ]);
+  } catch {
+    // DB unavailable — render empty state; ISR revalidates once DB is reachable
+  }
 
   return (
     <StorefrontLayout>
