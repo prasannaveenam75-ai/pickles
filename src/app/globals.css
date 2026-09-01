@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-cream: #FFF8F0;
+  --color-cream-dark: #F5EDE3;
+  --color-green: #1B5E20;
+  --color-green-light: #2E7D32;
+  --color-green-dark: #0D3B12;
+  --color-red: #C62828;
+  --color-red-light: #E53935;
+  --color-red-dark: #8E0000;
+  --color-golden: #D4A017;
+  --color-golden-light: #E8C547;
+  --color-golden-dark: #9E7B00;
+  --color-charcoal: #2D2D2D;
+  --color-charcoal-light: #424242;
+  --color-charcoal-dark: #1A1A1A;
+  --color-warm-white: #FFFDF9;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-charcoal);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--color-charcoal-dark);
+  }
+
+  ::selection {
+    background-color: var(--color-green);
+    color: white;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-green) transparent;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-3 bg-green text-white font-semibold tracking-wider text-sm uppercase rounded-lg transition-all duration-300 hover:bg-green-light hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-3 border-2 border-green text-green font-semibold tracking-wider text-sm uppercase rounded-lg transition-all duration-300 hover:bg-green hover:text-white;
+  }
+
+  .btn-red {
+    @apply inline-flex items-center justify-center px-8 py-3 bg-red text-white font-semibold tracking-wider text-sm uppercase rounded-lg transition-all duration-300 hover:bg-red-light hover:shadow-lg;
+  }
+
+  .btn-golden {
+    @apply inline-flex items-center justify-center px-8 py-3 bg-golden text-charcoal-dark font-semibold tracking-wider text-sm uppercase rounded-lg transition-all duration-300 hover:bg-golden-light hover:shadow-lg;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-10 py-4 text-base;
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-16 md:py-20 lg:py-24;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto w-full;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-cream-dark/50 overflow-hidden transition-all duration-300 hover:shadow-md;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-white border border-cream-dark rounded-lg text-charcoal placeholder:text-charcoal-light/50 focus:outline-none focus:ring-2 focus:ring-green/30 focus:border-green transition-all duration-200;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-center font-display;
+  }
+
+  .section-subtitle {
+    @apply text-base md:text-lg text-charcoal-light text-center mt-4 max-w-2xl mx-auto;
+  }
+
+  .product-card {
+    @apply bg-white rounded-xl overflow-hidden shadow-sm border border-cream-dark/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider;
+  }
+
+  .admin-layout {
+    @apply flex min-h-screen bg-gray-50;
+  }
+
+  .admin-sidebar {
+    @apply w-64 bg-charcoal-dark text-white p-4 flex-shrink-0;
+  }
+
+  .admin-main {
+    @apply flex-1 p-6 overflow-auto;
+  }
+
+  .admin-card {
+    @apply bg-white rounded-lg shadow-sm border p-6;
+  }
+
+  .admin-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green/30 focus:border-green;
+  }
+
+  .admin-btn {
+    @apply px-4 py-2 bg-green text-white rounded-lg text-sm font-medium hover:bg-green-light transition-colors;
+  }
+
+  .admin-btn-danger {
+    @apply px-4 py-2 bg-red text-white rounded-lg text-sm font-medium hover:bg-red-light transition-colors;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.6s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
