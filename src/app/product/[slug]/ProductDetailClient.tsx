@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Minus, Plus, ShoppingCart, MessageCircle, Truck, ShieldCheck, Leaf, Heart } from "lucide-react";
+import { Minus, Plus, ShoppingCart, MessageCircle, Truck, ShieldCheck, Leaf, Heart, Clock } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { StarRating } from "@/components/ui/StarRating";
 import { formatPrice } from "@/lib/utils";
@@ -140,8 +140,12 @@ export default function ProductDetailClient({ product, related }: ProductProps) 
           )}
 
           <div className="flex items-center gap-3 mb-6">
-            <StarRating rating={5} />
-            <span className="text-xs text-charcoal-light">Premium Homemade Quality</span>
+            <StarRating rating={Math.round(product.rating || 5)} />
+            <span className="text-xs text-charcoal-light">
+              {product.rating ? product.rating.toFixed(1) : "5.0"} · {product.reviewCount || 0}{" "}
+              {product.reviewCount === 1 ? "review" : "reviews"}
+            </span>
+            <span className="text-xs text-charcoal-light/60">Homemade Quality</span>
           </div>
 
           <div className="text-3xl font-bold text-charcoal-dark mb-2">
@@ -261,6 +265,24 @@ export default function ProductDetailClient({ product, related }: ProductProps) 
                 <p className="text-xs text-charcoal-light">Prepared with authentic ingredients and traditional methods.</p>
               </div>
             </div>
+            {product.shelfLife && (
+              <div className="flex items-start gap-3">
+                <Clock className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-charcoal-dark">Shelf Life</p>
+                  <p className="text-xs text-charcoal-light">{product.shelfLife}</p>
+                </div>
+              </div>
+            )}
+            {product.storageInstructions && (
+              <div className="flex items-start gap-3">
+                <ShieldCheck className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-charcoal-dark">Storage</p>
+                  <p className="text-xs text-charcoal-light">{product.storageInstructions}</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
+import { StarRating } from "@/components/ui/StarRating";
 import type { IProduct } from "@/types";
 
 export default function ProductCard({ product }: { product: IProduct }) {
@@ -16,6 +17,15 @@ export default function ProductCard({ product }: { product: IProduct }) {
     ? Math.min(...activeVariants.map((v) => v.price))
     : 0;
   const firstVariant = activeVariants[0];
+  const minVariant =
+    activeVariants.length > 0
+      ? activeVariants.reduce((a, b) => (a.price <= b.price ? a : b))
+      : null;
+  const multiplePrices = new Set(activeVariants.map((v) => v.price)).size > 1;
+  const offerPct =
+    minVariant?.compareAtPrice && minVariant.compareAtPrice > minVariant.price
+      ? Math.round(((minVariant.compareAtPrice - minVariant.price) / minVariant.compareAtPrice) * 100)
+      : 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -61,6 +71,9 @@ export default function ProductCard({ product }: { product: IProduct }) {
         {product.bestSeller && (
           <span className="absolute top-3 left-3 badge bg-red text-white">Best Seller</span>
         )}
+        {offerPct > 0 && (
+          <span className="absolute top-3 right-3 badge bg-golden text-white">{offerPct}% OFF</span>
+        )}
       </Link>
 
       <div className="p-4 flex flex-col flex-1">
@@ -73,10 +86,25 @@ export default function ProductCard({ product }: { product: IProduct }) {
           </h3>
         </Link>
 
-        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-charcoal-light">
-          <span className="font-semibold text-green text-base">
-            {minPrice > 0 ? `From ${formatPrice(minPrice)}` : "Sold Out"}
-          </span>
+        <div className="mt-2 flex flex-col gap-1.5">
+          {product.rating > 0 && (
+            <div className="flex items-center gap-1.5">
+              <StarRating rating={Math.round(product.rating)} size="sm" />
+              <span className="text-[11px] text-charcoal-light">
+                {product.rating.toFixed(1)} ({product.reviewCount || 0})
+              </span>
+            </div>
+          )}
+          <div className="flex items-baseline gap-2 flex-wrap">
+            <span className="font-semibold text-green text-base">
+              {minPrice > 0 ? `${multiplePrices ? "From " : ""}${formatPrice(minPrice)}` : "Sold Out"}
+            </span>
+            {minVariant?.compareAtPrice && minVariant.compareAtPrice > minVariant.price && (
+              <span className="text-xs text-charcoal-light line-through">
+                {formatPrice(minVariant.compareAtPrice)}
+              </span>
+            )}
+          </div>
         </div>
         <p className="mt-1 text-[11px] text-charcoal-light/60">{variantNames}</p>
 

@@ -22,6 +22,10 @@ export interface IProduct {
   cloudinaryPublicIds: string[];
   variants: IVariant[];
   ingredients: string[];
+  rating: number;
+  reviewCount: number;
+  shelfLife?: string;
+  storageInstructions?: string;
   tags: string[];
   featured: boolean;
   bestSeller: boolean;

@@ -22,6 +22,10 @@ export interface IProductDoc extends Document {
   cloudinaryPublicIds: string[];
   variants: IVariantDoc[];
   ingredients: string[];
+  rating: number;
+  reviewCount: number;
+  shelfLife?: string;
+  storageInstructions?: string;
   tags: string[];
   featured: boolean;
   bestSeller: boolean;
@@ -55,6 +59,10 @@ const ProductSchema = new Schema<IProductDoc>(
     cloudinaryPublicIds: [{ type: String }],
     variants: [VariantSchema],
     ingredients: [{ type: String }],
+    rating: { type: Number, min: 0, max: 5, default: 0 },
+    reviewCount: { type: Number, default: 0 },
+    shelfLife: { type: String },
+    storageInstructions: { type: String },
     tags: [{ type: String }],
     featured: { type: Boolean, default: false },
     bestSeller: { type: Boolean, default: false },
