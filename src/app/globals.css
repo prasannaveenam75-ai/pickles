@@ -1,21 +1,29 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-cream: #FFF8F0;
-  --color-cream-dark: #F5EDE3;
-  --color-green: #1B5E20;
-  --color-green-light: #2E7D32;
-  --color-green-dark: #0D3B12;
+  --color-cream: #f1dbbb;
+  --color-cream-dark: #e6ccb0;
+  --color-warm-white: #fdf6ee;
+  --color-maroon: #3a110c;
+  --color-maroon-light: #56150e;
+  --color-maroon-dark: #2a0b08;
+  --color-green: #3a110c;
+  --color-green-light: #56150e;
+  --color-green-dark: #2a0b08;
+  --color-veg: #1B5E20;
+  --color-veg-light: #2E7D32;
   --color-red: #C62828;
   --color-red-light: #E53935;
   --color-red-dark: #8E0000;
-  --color-golden: #D4A017;
-  --color-golden-light: #E8C547;
-  --color-golden-dark: #9E7B00;
+  --color-golden: #fbbc34;
+  --color-golden-light: #fcd56b;
+  --color-golden-dark: #d49a1a;
   --color-charcoal: #2D2D2D;
-  --color-charcoal-light: #424242;
+  --color-charcoal-light: #555555;
   --color-charcoal-dark: #1A1A1A;
-  --color-warm-white: #FFFDF9;
+  --color-sand: #f1dbbb;
+  --color-sand-light: #f5e6d0;
+  --color-sand-dark: #d9c1ad;
   --font-display: "Playfair Display", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
 }
@@ -41,23 +49,23 @@
   }
 
   ::selection {
-    background-color: var(--color-green);
+    background-color: var(--color-maroon);
     color: white;
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-green) transparent;
+    scrollbar-color: var(--color-maroon) transparent;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-3 bg-green text-white font-semibold tracking-wider text-sm uppercase rounded-lg transition-all duration-300 hover:bg-green-light hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
+    @apply inline-flex items-center justify-center px-8 py-3 bg-maroon text-white font-semibold tracking-wider text-sm uppercase rounded-lg transition-all duration-300 hover:bg-maroon-light hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-8 py-3 border-2 border-green text-green font-semibold tracking-wider text-sm uppercase rounded-lg transition-all duration-300 hover:bg-green hover:text-white;
+    @apply inline-flex items-center justify-center px-8 py-3 border-2 border-maroon text-maroon font-semibold tracking-wider text-sm uppercase rounded-lg transition-all duration-300 hover:bg-maroon hover:text-white;
   }
 
   .btn-red {
@@ -85,11 +93,11 @@
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-cream-dark/50 overflow-hidden transition-all duration-300 hover:shadow-md;
+    @apply bg-white rounded-xl shadow-sm border border-sand-dark/50 overflow-hidden transition-all duration-300 hover:shadow-md;
   }
 
   .input-field {
-    @apply w-full px-4 py-3 bg-white border border-cream-dark rounded-lg text-charcoal placeholder:text-charcoal-light/50 focus:outline-none focus:ring-2 focus:ring-green/30 focus:border-green transition-all duration-200;
+    @apply w-full px-4 py-3 bg-white border border-sand-dark rounded-lg text-charcoal placeholder:text-charcoal-light/50 focus:outline-none focus:ring-2 focus:ring-maroon/30 focus:border-maroon transition-all duration-200;
   }
 
   .section-title {
@@ -101,7 +109,7 @@
   }
 
   .product-card {
-    @apply bg-white rounded-xl overflow-hidden shadow-sm border border-cream-dark/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+    @apply bg-white rounded-xl overflow-hidden shadow-sm border border-sand-dark/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
   }
 
   .badge {
@@ -113,7 +121,7 @@
   }
 
   .admin-sidebar {
-    @apply w-64 bg-charcoal-dark text-white p-4 flex-shrink-0;
+    @apply w-64 bg-maroon-dark text-white p-4 flex-shrink-0;
   }
 
   .admin-main {
@@ -125,11 +133,11 @@
   }
 
   .admin-input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green/30 focus:border-green;
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-maroon/30 focus:border-maroon;
   }
 
   .admin-btn {
-    @apply px-4 py-2 bg-green text-white rounded-lg text-sm font-medium hover:bg-green-light transition-colors;
+    @apply px-4 py-2 bg-maroon text-white rounded-lg text-sm font-medium hover:bg-maroon-light transition-colors;
   }
 
   .admin-btn-danger {
@@ -153,6 +161,10 @@
   .animate-slide-in-left {
     animation: slideInLeft 0.6s ease-out;
   }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
 }
 
 @keyframes fadeIn {
@@ -168,6 +180,11 @@
 @keyframes slideInLeft {
   from { opacity: 0; transform: translateX(-20px); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 @media (prefers-reduced-motion: reduce) {

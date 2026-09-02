@@ -20,8 +20,11 @@ export interface IProductDoc extends Document {
   shortDescription: string;
   images: string[];
   cloudinaryPublicIds: string[];
+  videoUrl: string;
   variants: IVariantDoc[];
   ingredients: string[];
+  benefits: string[];
+  preparationMethod: string;
   rating: number;
   reviewCount: number;
   shelfLife?: string;
@@ -29,6 +32,8 @@ export interface IProductDoc extends Document {
   tags: string[];
   featured: boolean;
   bestSeller: boolean;
+  newProduct: boolean;
+  seasonal: boolean;
   active: boolean;
   seoTitle?: string;
   seoDescription?: string;
@@ -57,8 +62,11 @@ const ProductSchema = new Schema<IProductDoc>(
     shortDescription: { type: String, default: "" },
     images: [{ type: String }],
     cloudinaryPublicIds: [{ type: String }],
+    videoUrl: { type: String, default: "" },
     variants: [VariantSchema],
     ingredients: [{ type: String }],
+    benefits: [{ type: String }],
+    preparationMethod: { type: String, default: "" },
     rating: { type: Number, min: 0, max: 5, default: 0 },
     reviewCount: { type: Number, default: 0 },
     shelfLife: { type: String },
@@ -66,6 +74,8 @@ const ProductSchema = new Schema<IProductDoc>(
     tags: [{ type: String }],
     featured: { type: Boolean, default: false },
     bestSeller: { type: Boolean, default: false },
+    newProduct: { type: Boolean, default: false },
+    seasonal: { type: Boolean, default: false },
     active: { type: Boolean, default: true },
     seoTitle: { type: String },
     seoDescription: { type: String },
@@ -76,6 +86,8 @@ const ProductSchema = new Schema<IProductDoc>(
 ProductSchema.index({ category: 1 });
 ProductSchema.index({ featured: 1 });
 ProductSchema.index({ bestSeller: 1 });
+ProductSchema.index({ newProduct: 1 });
+ProductSchema.index({ seasonal: 1 });
 ProductSchema.index({ active: 1 });
 ProductSchema.index({ name: "text", description: "text", tags: "text" });
 

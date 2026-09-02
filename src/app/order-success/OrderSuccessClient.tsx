@@ -23,8 +23,8 @@ export default function OrderSuccessClient({ orderNumber }: { orderNumber: strin
 
   return (
     <div className="container-custom mx-auto px-4 sm:px-6 lg:px-8 py-16 min-h-[60vh] text-center">
-      <div className="w-24 h-24 bg-green/10 rounded-full flex items-center justify-center mx-auto mb-8">
-        <CheckCircle2 className="w-12 h-12 text-green" />
+      <div className="w-24 h-24 bg-veg/10 rounded-full flex items-center justify-center mx-auto mb-8">
+        <CheckCircle2 className="w-12 h-12 text-veg" />
       </div>
 
       <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">
@@ -39,11 +39,11 @@ export default function OrderSuccessClient({ orderNumber }: { orderNumber: strin
         <div className="space-y-4">
           <div>
             <p className="text-xs text-charcoal-light uppercase tracking-wider">Order Number</p>
-            <p className="text-xl font-bold text-green">{orderData?.orderNumber || orderNumber || "N/A"}</p>
+            <p className="text-xl font-bold text-veg">{orderData?.orderNumber || orderNumber || "N/A"}</p>
           </div>
           <div>
             <p className="text-xs text-charcoal-light uppercase tracking-wider">Payment Status</p>
-            <p className="text-sm font-semibold text-green">Payment Successful</p>
+            <p className="text-sm font-semibold text-veg">Payment Successful</p>
           </div>
           {orderData?.grandTotal && (
             <div>

@@ -29,7 +29,7 @@ export default function TrustStrip({ items }: { items: TrustItem[] }) {
             const Icon = iconMap[item.icon] || Leaf;
             return (
               <div key={item.title} className="flex flex-col items-center text-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-green/10 flex items-center justify-center text-green">
+                <div className="w-12 h-12 rounded-full bg-veg/10 flex items-center justify-center text-veg">
                   <Icon className="w-6 h-6" />
                 </div>
                 <div>

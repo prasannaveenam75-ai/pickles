@@ -20,8 +20,11 @@ export interface IProduct {
   shortDescription: string;
   images: string[];
   cloudinaryPublicIds: string[];
+  videoUrl: string;
   variants: IVariant[];
   ingredients: string[];
+  benefits: string[];
+  preparationMethod: string;
   rating: number;
   reviewCount: number;
   shelfLife?: string;
@@ -29,6 +32,8 @@ export interface IProduct {
   tags: string[];
   featured: boolean;
   bestSeller: boolean;
+  newProduct: boolean;
+  seasonal: boolean;
   active: boolean;
   seoTitle?: string;
   seoDescription?: string;
@@ -42,11 +47,62 @@ export interface ICategory {
   slug: string;
   description: string;
   image: string;
+  banner: string;
   cloudinaryPublicId?: string;
+  parent?: string;
   displayOrder: number;
   active: boolean;
+  seasonal: boolean;
+  seasonalStart?: string;
+  seasonalEnd?: string;
+  startDate?: string;
+  endDate?: string;
   seoTitle?: string;
   seoDescription?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IComboItem {
+  product: string;
+  productName: string;
+  variantName: string;
+  quantity: number;
+}
+
+export interface ICombo {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image: string;
+  products: IComboItem[];
+  comboPrice: number;
+  originalPrice: number;
+  discount: number;
+  stock: number;
+  active: boolean;
+  featured: boolean;
+  tags: string[];
+  seoTitle?: string;
+  seoDescription?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ISeasonalCollection {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image: string;
+  banner: string;
+  categories: string[];
+  products: string[];
+  startDate?: string;
+  endDate?: string;
+  active: boolean;
+  displayOrder: number;
   createdAt: string;
   updatedAt: string;
 }

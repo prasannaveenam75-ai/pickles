@@ -257,8 +257,8 @@ export default function CheckoutClient() {
   if (items.length === 0 && alreadyOrdered) {
     return (
       <div className="container-custom mx-auto px-4 py-16 text-center">
-        <div className="w-20 h-20 bg-green/10 rounded-full flex items-center justify-center mx-auto mb-6">
-          <ShieldCheck className="w-10 h-10 text-green" />
+        <div className="w-20 h-20 bg-veg/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <ShieldCheck className="w-10 h-10 text-veg" />
         </div>
         <h1 className="font-display text-2xl font-bold mb-2">Order Placed!</h1>
         <p className="text-charcoal-light mb-6">Thank you for your order.</p>
@@ -480,7 +480,7 @@ export default function CheckoutClient() {
               <ArrowLeft className="w-4 h-4" /> Back to Cart
             </Link>
             <p className="text-center text-xs text-charcoal-light/70 flex items-center justify-center gap-1">
-              <ShieldCheck className="w-4 h-4 text-green" />
+              <ShieldCheck className="w-4 h-4 text-veg" />
               Secure payment via Razorpay
             </p>
           </div>

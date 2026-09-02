@@ -9,3 +9,5 @@ export { default as FAQ } from "./FAQ";
 export { default as SiteSettings } from "./SiteSettings";
 export { default as Homepage } from "./Homepage";
 export { default as Testimonial } from "./Testimonial";
+export { default as Combo } from "./Combo";
+export { default as SeasonalCollection } from "./SeasonalCollection";
