@@ -27,10 +27,11 @@ export default async function HomePage() {
   let powderProducts: any[] = [], nonVegProducts: any[] = [], seasonalProducts: any[] = [];
   let instagramUrl = "";
   let hc: Record<string, any> = {};
+  let productsByCategory: Record<string, number> = {};
   try {
     await connectToDatabase();
 
-    const [cats, sellers, fqs, homepageData, writtenT, videoT, settings, powders, nonVeg, seasonal] = await Promise.all([
+    const [cats, sellers, fqs, homepageData, writtenT, videoT, settings, powders, nonVeg, seasonal, catCounts] = await Promise.all([
       Category.find({ active: true }).sort({ displayOrder: 1 }).lean(),
       Product.find({ active: true, bestSeller: true }).limit(8).lean(),
       FAQ.find({ active: true }).sort({ displayOrder: 1 }).limit(6).lean(),
@@ -41,6 +42,7 @@ export default async function HomePage() {
       Product.find({ active: true, category: "Powders" }).limit(8).lean(),
       Product.find({ active: true, category: "Non-Veg Pickles" }).limit(8).lean(),
       Product.find({ active: true, seasonal: true }).limit(8).lean(),
+      Product.aggregate([{ $match: { active: true } }, { $group: { _id: "$category", count: { $sum: 1 } } }]),
     ]);
 
     categories = cats;
@@ -51,6 +53,7 @@ export default async function HomePage() {
     powderProducts = powders;
     nonVegProducts = nonVeg;
     seasonalProducts = seasonal;
+    (catCounts || []).forEach((c: any) => { productsByCategory[c._id] = c.count; });
     instagramUrl = (settings as any)?.instagramUrl || "";
     hc = serialize((homepageData as Record<string, any>) || {});
     const featuredIds = hc.featuredProducts || [];
@@ -78,6 +81,7 @@ export default async function HomePage() {
           slug: c.slug,
           description: c.description,
           image: c.image,
+          productCount: productsByCategory?.[c.name] || 0,
         }))}
       />
       <BestSellers products={serialize(bestSellers)} />

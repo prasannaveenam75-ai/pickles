@@ -1,4 +1,6 @@
-import { Leaf, ShieldCheck, Heart, Sparkles } from "lucide-react";
+"use client";
+
+import { Leaf, ShieldCheck, Heart, Sparkles, ArrowRight } from "lucide-react";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   leaf: Leaf,
@@ -15,31 +17,32 @@ interface TrustItem {
 
 export default function TrustStrip({ items }: { items: TrustItem[] }) {
   const elements = items?.length ? items : [
-    { icon: "leaf", title: "100% NATURAL", description: "Made with natural ingredients." },
-    { icon: "shield", title: "NO ARTIFICIAL COLOURS", description: "Authentic colours from real ingredients." },
-    { icon: "heart", title: "HOMEMADE TASTE", description: "Traditional recipes and care." },
-    { icon: "check", title: "HYGIENICALLY PREPARED", description: "Packed with high standards of hygiene." },
+    { icon: "leaf", title: "100% Natural", description: "Made with natural ingredients." },
+    { icon: "shield", title: "No Preservatives", description: "Freshly prepared in small batches." },
+    { icon: "heart", title: "Homemade Taste", description: "Traditional recipes and love." },
+    { icon: "check", title: "Quality Ingredients", description: "Carefully sourced and hygienic." },
   ];
 
   return (
-    <section className="bg-white py-10 md:py-14">
-      <div className="container-custom mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+    <section className="bg-maroon text-white">
+      <div className="container-custom mx-auto px-4 py-4 md:py-5">
+        <div className="flex items-center overflow-x-auto gap-6 md:gap-0 md:justify-between scrollbar-hide">
           {elements.map((item) => {
             const Icon = iconMap[item.icon] || Leaf;
             return (
-              <div key={item.title} className="flex flex-col items-center text-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-veg/10 flex items-center justify-center text-veg">
-                  <Icon className="w-6 h-6" />
+              <div key={item.title} className="flex items-center gap-3 flex-shrink-0 md:flex-1 px-2">
+                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center text-golden">
+                  <Icon className="w-4 h-4 md:w-5 md:h-5" />
                 </div>
-                <div>
-                  <h3 className="text-sm font-bold uppercase tracking-wide text-charcoal-dark">
+                <div className="min-w-0">
+                  <h3 className="text-[11px] md:text-sm font-bold uppercase tracking-wide text-white whitespace-nowrap">
                     {item.title}
                   </h3>
-                  {item.description && (
-                    <p className="text-xs text-charcoal-light mt-1">{item.description}</p>
-                  )}
+                  <p className="text-white/60 text-[10px] md:text-xs hidden sm:block whitespace-nowrap">
+                    {item.description}
+                  </p>
                 </div>
+                <ArrowRight className="w-4 h-4 text-white/30 md:hidden ml-2" />
               </div>
             );
           })}

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useCartStore } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
-import { ShieldCheck, MessageCircle, CreditCard, Loader2, ArrowLeft } from "lucide-react";
+import { ShieldCheck, MessageCircle, CreditCard, Loader2, ArrowLeft, User, MapPin } from "lucide-react";
 import Link from "next/link";
 
 declare global {
@@ -189,7 +189,7 @@ export default function CheckoutClient() {
           contact: form.phone,
         },
         theme: {
-          color: "#1B5E20",
+          color: "#5A160D",
         },
         modal: {
           ondismiss: () => {
@@ -268,112 +268,68 @@ export default function CheckoutClient() {
     );
   }
 
+  const inputLabel = "block text-sm font-medium text-charcoal-dark mb-1.5";
+
   return (
-    <div className="container-custom mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <h1 className="font-display text-3xl font-bold mb-8">Checkout</h1>
+    <div className="container-custom mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 min-h-[60vh]">
+      <h1 className="text-2xl md:text-3xl font-display font-bold mb-6 md:mb-8">Checkout</h1>
 
       {error && (
-        <div className="bg-red/10 border border-red/30 text-red rounded-lg p-4 mb-6 text-sm">
+        <div className="bg-red/10 border border-red/30 text-red rounded-xl p-4 mb-6 text-sm">
           {error}
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">
-        <div className="space-y-6">
-          <div className="bg-white rounded-xl border border-cream-dark/50 p-6">
-            <h2 className="font-display text-xl font-bold mb-6">Contact Information</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 lg:gap-8 mb-24 lg:mb-0">
+        <div className="space-y-5">
+          {/* Contact */}
+          <div className="bg-white rounded-2xl border border-cream-dark/20 p-5 md:p-6">
+            <h2 className="font-display text-lg font-bold mb-5 flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-maroon text-white flex items-center justify-center text-sm">1</span>
+              Contact Information
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1.5">Full Name *</label>
-                <input
-                  type="text"
-                  name="fullName"
-                  value={form.fullName}
-                  onChange={handleInput}
-                  className="input-field"
-                  placeholder="Your full name"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5">Mobile Number *</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleInput}
-                  className="input-field"
-                  placeholder="10-digit mobile number"
-                />
-              </div>
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium mb-1.5">Email *</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleInput}
-                  className="input-field"
-                  placeholder="you@example.com"
-                />
+                <label className={inputLabel}>Full Name *</label>
+                <input type="text" name="fullName" value={form.fullName} onChange={handleInput} className="input-field" placeholder="Your full name" />
+              </div>
+              <div>
+                <label className={inputLabel}>Mobile Number *</label>
+                <input type="tel" name="phone" value={form.phone} onChange={handleInput} className="input-field" placeholder="10-digit mobile number" />
+              </div>
+              <div>
+                <label className={inputLabel}>Email *</label>
+                <input type="email" name="email" value={form.email} onChange={handleInput} className="input-field" placeholder="you@example.com" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-cream-dark/50 p-6">
-            <h2 className="font-display text-xl font-bold mb-6">Shipping Address</h2>
+          {/* Shipping */}
+          <div className="bg-white rounded-2xl border border-cream-dark/20 p-5 md:p-6">
+            <h2 className="font-display text-lg font-bold mb-5 flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-maroon text-white flex items-center justify-center text-sm">2</span>
+              Shipping Address
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1.5">House / Flat Number *</label>
-                <input
-                  type="text"
-                  name="houseFlat"
-                  value={form.houseFlat}
-                  onChange={handleInput}
-                  className="input-field"
-                  placeholder="House no, flat no"
-                />
+                <label className={inputLabel}>House / Flat Number *</label>
+                <input type="text" name="houseFlat" value={form.houseFlat} onChange={handleInput} className="input-field" placeholder="House no, flat no" />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5">Street *</label>
-                <input
-                  type="text"
-                  name="street"
-                  value={form.street}
-                  onChange={handleInput}
-                  className="input-field"
-                  placeholder="Street name"
-                />
+                <label className={inputLabel}>Street *</label>
+                <input type="text" name="street" value={form.street} onChange={handleInput} className="input-field" placeholder="Street name" />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5">Area</label>
-                <input
-                  type="text"
-                  name="area"
-                  value={form.area}
-                  onChange={handleInput}
-                  className="input-field"
-                  placeholder="Area / locality"
-                />
+                <label className={inputLabel}>Area</label>
+                <input type="text" name="area" value={form.area} onChange={handleInput} className="input-field" placeholder="Area / locality" />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5">City *</label>
-                <input
-                  type="text"
-                  name="city"
-                  value={form.city}
-                  onChange={handleInput}
-                  className="input-field"
-                  placeholder="City"
-                />
+                <label className={inputLabel}>City *</label>
+                <input type="text" name="city" value={form.city} onChange={handleInput} className="input-field" placeholder="City" />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5">State *</label>
-                <select
-                  name="state"
-                  value={form.state}
-                  onChange={handleInput}
-                  className="input-field"
-                >
+                <label className={inputLabel}>State *</label>
+                <select name="state" value={form.state} onChange={handleInput} className="input-field">
                   <option value="">Select state</option>
                   {indianStates.map((s) => (
                     <option key={s} value={s}>{s}</option>
@@ -381,42 +337,24 @@ export default function CheckoutClient() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5">Pincode *</label>
-                <input
-                  type="text"
-                  name="pincode"
-                  value={form.pincode}
-                  onChange={handleInput}
-                  className="input-field"
-                  placeholder="6-digit pincode"
-                  maxLength={6}
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-sm font-medium mb-1.5">Country</label>
-                <input
-                  type="text"
-                  name="country"
-                  value={form.country}
-                  onChange={handleInput}
-                  className="input-field"
-                />
+                <label className={inputLabel}>Pincode *</label>
+                <input type="text" name="pincode" value={form.pincode} onChange={handleInput} className="input-field" placeholder="6-digit pincode" maxLength={6} />
               </div>
             </div>
           </div>
         </div>
 
         <div className="lg:sticky lg:top-24 h-fit">
-          <div className="bg-white rounded-xl border border-cream-dark/50 p-6 mb-6">
-            <h2 className="font-display text-xl font-bold mb-5">Order Summary</h2>
-            <div className="space-y-3 mb-5">
+          <div className="bg-white rounded-2xl border border-cream-dark/20 p-5 md:p-6 mb-5">
+            <h2 className="font-display text-lg font-bold mb-4">Order Summary</h2>
+            <div className="space-y-4 mb-4">
               {items.map((item) => (
                 <div key={`${item.productId}-${item.variantId}`} className="flex items-center gap-3">
                   <div className="w-14 h-14 rounded-lg overflow-hidden bg-cream-dark/30 flex-shrink-0">
                     {item.image ? (
                       <Image src={item.image} alt={item.productName} width={56} height={56} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-green-dark flex items-center justify-center">
+                      <div className="w-full h-full bg-maroon-dark flex items-center justify-center">
                         <span className="text-white/40 text-[8px] uppercase text-center px-1">{item.productName.slice(0, 5)}</span>
                       </div>
                     )}
@@ -430,7 +368,7 @@ export default function CheckoutClient() {
               ))}
             </div>
 
-            <div className="border-t border-cream-dark/50 pt-4 space-y-2 text-sm">
+            <div className="border-t border-cream-dark/30 pt-4 space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-charcoal-light">Subtotal</span>
                 <span className="font-semibold">{formatPrice(subtotal)}</span>
@@ -446,9 +384,9 @@ export default function CheckoutClient() {
                 </span>
               </div>
             </div>
-            <div className="border-t border-cream-dark/50 mt-4 pt-4 flex justify-between items-center">
+            <div className="border-t border-cream-dark/30 mt-4 pt-4 flex justify-between items-center">
               <span className="font-semibold">Grand Total</span>
-              <span className="text-2xl font-bold">{formatPrice(grandTotal)}</span>
+              <span className="text-xl font-bold">{formatPrice(grandTotal)}</span>
             </div>
           </div>
 

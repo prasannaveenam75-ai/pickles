@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Minus, Plus, ShoppingCart, MessageCircle, Truck, ShieldCheck, Leaf, Heart, Clock, Play, CheckCircle } from "lucide-react";
 import { useCartStore } from "@/store/cart";
+import { useWishlistStore } from "@/store/wishlist";
 import { StarRating } from "@/components/ui/StarRating";
 import TestimonialQuoteCard from "@/components/ui/TestimonialQuoteCard";
 import { formatPrice } from "@/lib/utils";
@@ -20,11 +21,13 @@ interface ProductProps {
 export default function ProductDetailClient({ product, related, testimonials = [] }: ProductProps) {
   const router = useRouter();
   const addItem = useCartStore((s) => s.addItem);
+  const wishlist = useWishlistStore();
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
     product.variants?.[0]?._id || ""
   );
   const [quantity, setQuantity] = useState(1);
   const [showVideo, setShowVideo] = useState(false);
+  const isWishlisted = wishlist.has(product._id);
 
   const variants = product.variants?.filter((v: any) => v.active) || [];
   const selectedVariant = variants.find((v: any) => v._id === selectedVariantId) || variants[0];
@@ -76,7 +79,7 @@ export default function ProductDetailClient({ product, related, testimonials = [
   };
 
   return (
-    <div className="container-custom mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="container-custom mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-28 lg:pb-10">
       <nav className="text-xs text-charcoal-light mb-6 flex flex-wrap items-center gap-1">
         <Link href="/" className="hover:text-maroon">Home</Link>
         <span>/</span>
@@ -248,6 +251,16 @@ export default function ProductDetailClient({ product, related, testimonials = [
             </button>
           </div>
 
+          <button
+            onClick={() => wishlist.toggle(product._id)}
+            className={`inline-flex items-center gap-2 text-sm font-semibold mb-6 transition-colors ${
+              isWishlisted ? "text-red" : "text-charcoal-light hover:text-red"
+            }`}
+          >
+            <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />
+            {isWishlisted ? "Added to Wishlist" : "Add to Wishlist"}
+          </button>
+
           <a
             href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`}
             target="_blank"
@@ -388,6 +401,32 @@ export default function ProductDetailClient({ product, related, testimonials = [
             {related.map((p: any) => (
               <ProductCard key={p._id} product={p} />
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Mobile sticky bottom CTA */}
+      {inStock && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-cream-dark/30 p-3 lg:hidden safe-area-bottom">
+          <div className="container-custom mx-auto flex items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] text-charcoal-light">Price</p>
+              <p className="text-base font-bold text-charcoal-dark">
+                {selectedVariant ? formatPrice(selectedVariant.price * quantity) : "—"}
+              </p>
+            </div>
+            <button
+              onClick={handleAddToCart}
+              className="flex-1 bg-maroon text-white text-sm font-bold py-3 rounded-full hover:bg-maroon-light transition-colors"
+            >
+              Add to Cart
+            </button>
+            <button
+              onClick={handleBuyNow}
+              className="flex-1 bg-golden text-white text-sm font-bold py-3 rounded-full hover:bg-golden-light transition-colors"
+            >
+              Buy Now
+            </button>
           </div>
         </div>
       )}

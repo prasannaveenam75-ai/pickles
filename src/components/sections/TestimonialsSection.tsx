@@ -52,14 +52,11 @@ export default function TestimonialsSection({ testimonials }: { testimonials: IT
   return (
     <section className="py-20 bg-white overflow-hidden">
       <div className="container-custom mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-4">
-          <p className="text-golden-dark font-display text-xs tracking-[0.25em] uppercase">Our Stories</p>
-          <h2 className="section-title mt-2">Loved By Pickle Lovers</h2>
+        <div className="text-center mb-8 md:mb-12">
+          <p className="text-golden-dark font-display text-[11px] md:text-xs tracking-[0.25em] uppercase font-semibold">Our Stories</p>
+          <h2 className="section-title mt-1 md:mt-2">Loved by Our Customers ❤️</h2>
           <p className="section-subtitle">
             From our kitchen to your table — hear what our customers have to say.
-          </p>
-          <p className="text-xs text-charcoal-light/60 mt-2 font-medium">
-            Trusted by pickle lovers across India
           </p>
         </div>
 

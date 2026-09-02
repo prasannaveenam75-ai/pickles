@@ -6,21 +6,26 @@ export default function BestSellers({ products }: { products: IProduct[] }) {
   if (!products?.length) return null;
 
   return (
-    <section className="section-padding bg-white">
-      <div className="container-custom mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10">
+    <section className="py-10 md:py-16 bg-white">
+      <div className="container-custom mx-auto px-4">
+        <div className="flex items-end justify-between mb-6 md:mb-8">
           <div>
-            <h2 className="section-title text-left">Our Bestsellers</h2>
-            <p className="text-charcoal-light mt-3">Loved by our customers. Prepared with tradition.</p>
+            <h2 className="text-xl md:text-3xl lg:text-4xl font-display font-bold text-charcoal-dark">
+              Our Best Sellers
+            </h2>
+            <p className="text-xs md:text-sm text-charcoal-light mt-1">
+              Loved by our customers. Prepared with tradition.
+            </p>
           </div>
-          <Link href="/shop" className="mt-4 md:mt-0 text-sm font-semibold text-green hover:text-green-light uppercase tracking-wider inline-flex items-center gap-2">
+          <Link
+            href="/shop"
+            className="text-xs md:text-sm font-bold text-maroon hover:text-maroon-light uppercase tracking-wider inline-flex items-center gap-1.5 flex-shrink-0"
+          >
             View All
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <span className="inline-block w-5 h-5 rounded-full bg-maroon text-white flex items-center justify-center text-[10px]">→</span>
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
           {products.slice(0, 8).map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}

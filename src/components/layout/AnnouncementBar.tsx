@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 export default function AnnouncementBar() {
-  const [text, setText] = useState("AUTHENTIC HOMEMADE PICKLES • FRESHLY PREPARED • MADE WITH LOVE");
+  const [text, setText] = useState("Worldwide Shipping Available • Free Shipping Above ₹999 • Order Now");
   const [active, setActive] = useState(true);
 
   useEffect(() => {
@@ -21,8 +21,15 @@ export default function AnnouncementBar() {
   if (!active) return null;
 
   return (
-    <div className="bg-green-dark text-white text-center py-2 px-4 text-[11px] md:text-xs tracking-[0.15em] uppercase font-medium">
-      {text}
+    <div className="bg-maroon-dark text-white overflow-hidden h-8 flex items-center">
+      <div className="animate-marquee whitespace-nowrap flex">
+        {[...Array(4)].map((_, i) => (
+          <span key={i} className="inline-flex items-center text-[11px] md:text-xs tracking-[0.12em] uppercase font-medium px-8">
+            {text}
+            <span className="mx-6 text-golden">•</span>
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
