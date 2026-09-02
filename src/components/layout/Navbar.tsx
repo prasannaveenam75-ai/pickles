@@ -188,7 +188,7 @@ export default function Navbar() {
               <div className="px-4 pb-4 border-t border-cream-dark/50">
                 <p className="text-xs text-charcoal-light uppercase tracking-wider mt-3 mb-2">Popular Searches</p>
                 <div className="flex flex-wrap gap-2">
-                  {["Mango Pickle", "Chicken Pickle", "Murukulu", "Laddu", "Podi"].map((term) => (
+                  {["Avakai Pickle", "Chicken Pickle", "Gongura Pickle", "Lemon Pickle", "Pappula Podi"].map((term) => (
                     <button
                       key={term}
                       onClick={() => { setSearchQuery(term); }}

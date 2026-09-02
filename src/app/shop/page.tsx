@@ -20,8 +20,8 @@ export default async function ShopPage() {
       Product.find({ active: true }).sort({ featured: -1, createdAt: -1 }).lean(),
       Category.find({ active: true }).sort({ displayOrder: 1 }).lean(),
     ]);
-  } catch {
-    // DB unavailable — render empty state; ISR revalidates once DB is reachable
+  } catch (err) {
+    console.error("Shop page DB error:", err);
   }
 
   return (

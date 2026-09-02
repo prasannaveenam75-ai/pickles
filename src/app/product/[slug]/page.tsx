@@ -47,7 +47,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       productId: (product as any)._id,
       active: true,
     }).sort({ displayOrder: 1, createdAt: -1 }).limit(4).lean();
-  } catch {
+  } catch (err) {
+    console.error("Product page DB error:", err);
     related = [];
     if (!product) notFound();
   }

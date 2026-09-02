@@ -24,13 +24,13 @@ export const revalidate = 300;
 export default async function HomePage() {
   let categories: any[] = [], bestSellers: any[] = [], faqs: any[] = [], featured: any[] = [];
   let writtenTestimonials: any[] = [], videoTestimonials: any[] = [];
-  let sweetProducts: any[] = [], snackProducts: any[] = [], seasonalProducts: any[] = [];
+  let powderProducts: any[] = [], nonVegProducts: any[] = [], seasonalProducts: any[] = [];
   let instagramUrl = "";
   let hc: Record<string, any> = {};
   try {
     await connectToDatabase();
 
-    const [cats, sellers, fqs, homepageData, writtenT, videoT, settings, sweets, snacks, seasonal] = await Promise.all([
+    const [cats, sellers, fqs, homepageData, writtenT, videoT, settings, powders, nonVeg, seasonal] = await Promise.all([
       Category.find({ active: true }).sort({ displayOrder: 1 }).lean(),
       Product.find({ active: true, bestSeller: true }).limit(8).lean(),
       FAQ.find({ active: true }).sort({ displayOrder: 1 }).limit(6).lean(),
@@ -38,8 +38,8 @@ export default async function HomePage() {
       Testimonial.find({ active: true, type: "written" }).sort({ displayOrder: 1, createdAt: -1 }).limit(10).lean(),
       Testimonial.find({ active: true, type: { $in: ["instagram", "uploaded"] } }).sort({ displayOrder: 1, createdAt: -1 }).limit(6).lean(),
       SiteSettings.findOne().lean(),
-      Product.find({ active: true, category: "Sweets" }).limit(8).lean(),
-      Product.find({ active: true, category: "Snacks" }).limit(8).lean(),
+      Product.find({ active: true, category: "Powders" }).limit(8).lean(),
+      Product.find({ active: true, category: "Non-Veg Pickles" }).limit(8).lean(),
       Product.find({ active: true, seasonal: true }).limit(8).lean(),
     ]);
 
@@ -48,8 +48,8 @@ export default async function HomePage() {
     faqs = fqs;
     writtenTestimonials = writtenT;
     videoTestimonials = videoT;
-    sweetProducts = sweets;
-    snackProducts = snacks;
+    powderProducts = powders;
+    nonVegProducts = nonVeg;
     seasonalProducts = seasonal;
     instagramUrl = (settings as any)?.instagramUrl || "";
     hc = serialize((homepageData as Record<string, any>) || {});
@@ -57,8 +57,8 @@ export default async function HomePage() {
     featured = featuredIds.length
       ? await Product.find({ _id: { $in: featuredIds }, active: true }).lean()
       : [];
-  } catch {
-    // DB unavailable — render default sections; ISR revalidates once DB is reachable
+  } catch (err) {
+    console.error("Homepage DB error:", err);
   }
 
   return (
@@ -81,11 +81,11 @@ export default async function HomePage() {
         }))}
       />
       <BestSellers products={serialize(bestSellers)} />
-      {sweetProducts.length > 0 && (
-        <SweetsSection products={serialize(sweetProducts)} />
+      {nonVegProducts.length > 0 && (
+        <SnacksSection products={serialize(nonVegProducts)} title="PREMIUM NON-VEG PICKLES" subtitle="Rich, fiery and prepared the traditional way with the finest ingredients." />
       )}
-      {snackProducts.length > 0 && (
-        <SnacksSection products={serialize(snackProducts)} />
+      {powderProducts.length > 0 && (
+        <SweetsSection products={serialize(powderProducts)} title="TRADITIONAL POWDERS & PODIS" subtitle="Hand-roasted spice blends made the traditional way." />
       )}
       {seasonalProducts.length > 0 && (
         <SeasonalSection products={serialize(seasonalProducts)} />

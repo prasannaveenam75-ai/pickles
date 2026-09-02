@@ -39,7 +39,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     category = await Category.findOne({ slug }).lean();
     if (!category || !category.active) notFound();
     products = await Product.find({ category: category.name, active: true }).lean();
-  } catch {
+  } catch (err) {
+    console.error("Category page DB error:", err);
     notFound();
   }
 
