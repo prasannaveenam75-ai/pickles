@@ -32,7 +32,7 @@ export default function Footer() {
               Traditional homemade pickles and snacks crafted with care. Pure, fresh and made with love. Every jar carries the warmth of authentic Indian cooking.
             </p>
             <div className="flex gap-3 mb-6">
-              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-veg/20 rounded-lg flex items-center justify-center hover:bg-veg/40 transition-colors text-veg text-xs font-bold" aria-label="WhatsApp">
+              <a href="https://wa.me/918008062755" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-veg/20 rounded-lg flex items-center justify-center hover:bg-veg/40 transition-colors text-veg text-xs font-bold" aria-label="WhatsApp">
                 WA
               </a>
               <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors text-white text-xs font-bold" aria-label="Instagram">
