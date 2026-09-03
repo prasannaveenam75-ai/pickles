@@ -4,17 +4,11 @@ import TrustStrip from "@/components/sections/TrustStrip";
 import CategoryShowcase from "@/components/sections/CategoryShowcase";
 import BestSellers from "@/components/sections/BestSellers";
 import StorySection from "@/components/sections/StorySection";
-import WhyChooseUs from "@/components/sections/WhyChooseUs";
-import PickleExperience from "@/components/sections/PickleExperience";
-import SweetsSection from "@/components/sections/SweetsSection";
-import SnacksSection from "@/components/sections/SnacksSection";
-import SeasonalSection from "@/components/sections/SeasonalSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import VideoTestimonialsSection from "@/components/sections/VideoTestimonialsSection";
-import SocialGallery from "@/components/sections/SocialGallery";
-import FAQSection from "@/components/sections/FAQSection";
-import FinalCTA from "@/components/sections/FinalCTA";
-import FeaturedProducts from "@/components/sections/FeaturedProducts";
+import ShopNowSection from "@/components/sections/ShopNowSection";
+import NoticeBanner from "@/components/sections/NoticeBanner";
+import FounderSection from "@/components/sections/FounderSection";
 import { connectToDatabase } from "@/lib/mongodb";
 import { Category, Homepage, Product, Testimonial, SiteSettings, FAQ } from "@/lib/models";
 import { serialize } from "@/lib/utils/serialize";
@@ -83,30 +77,10 @@ export default async function HomePage() {
           productCount: productsByCategory?.[c.name] || 0,
         }))}
       />
-      <TrustStrip items={hc.trustItems} />
       <BestSellers products={serialize(bestSellers)} />
       {writtenTestimonials.length > 0 && (
         <TestimonialsSection testimonials={serialize(writtenTestimonials)} />
       )}
-      <WhyChooseUs title={hc.whyChooseUs?.title} items={hc.whyChooseUs?.items} />
-      <StorySection
-        title={hc.storySection?.title || "TRADITION IN EVERY JAR"}
-        text={hc.storySection?.text || "At Devi Pickles, every jar carries the warmth of traditional homemade cooking."}
-        image={hc.storySection?.image || ""}
-      />
-      {nonVegProducts.length > 0 && (
-        <SnacksSection products={serialize(nonVegProducts)} title="PREMIUM NON-VEG PICKLES" subtitle="Rich, fiery and prepared the traditional way with the finest ingredients." />
-      )}
-      {powderProducts.length > 0 && (
-        <SweetsSection products={serialize(powderProducts)} title="TRADITIONAL POWDERS & PODIS" subtitle="Hand-roasted spice blends made the traditional way." />
-      )}
-      {seasonalProducts.length > 0 && (
-        <SeasonalSection products={serialize(seasonalProducts)} />
-      )}
-      {featured.length > 0 && (
-        <FeaturedProducts products={serialize(featured)} />
-      )}
-      <PickleExperience steps={hc.experienceSteps} />
       {videoTestimonials.length > 0 && (
         <VideoTestimonialsSection
           videos={serialize(videoTestimonials)}
@@ -116,15 +90,19 @@ export default async function HomePage() {
           instagramUrl={instagramUrl}
         />
       )}
-      <SocialGallery images={hc.socialGallery} />
-      <FAQSection
-        faqs={faqs?.map((f: any) => ({ _id: f._id?.toString(), question: f.question, answer: f.answer }))}
+      <StorySection
+        title={hc.storySection?.title || "TRADITION IN EVERY JAR"}
+        text={hc.storySection?.text || "At Devi Pickles, every jar carries the warmth of traditional homemade cooking."}
+        image={hc.storySection?.image || ""}
       />
-      <FinalCTA
-        heading={hc.finalCta?.heading}
-        description={hc.finalCta?.description}
-        buttonText={hc.finalCta?.buttonText}
-        buttonUrl={hc.finalCta?.buttonUrl}
+      <ShopNowSection products={serialize(featured.length ? featured : bestSellers)} />
+      <NoticeBanner variant="video" />
+      <TrustStrip items={hc.trustItems} />
+      <NoticeBanner variant="returns" />
+      <FounderSection
+        title={hc.founderSection?.title}
+        text={hc.founderSection?.text}
+        image={hc.storySection?.image}
       />
     </StorefrontLayout>
   );
