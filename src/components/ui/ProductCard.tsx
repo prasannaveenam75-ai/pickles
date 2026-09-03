@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, ShoppingCart, Minus, Plus, Scale } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Heart, ShoppingCart, Minus, Plus, Scale, Zap } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import { useCompareStore } from "@/store/compare";
@@ -11,6 +12,7 @@ import { formatPrice } from "@/lib/utils";
 import type { IProduct } from "@/types";
 
 export default function ProductCard({ product }: { product: IProduct }) {
+  const router = useRouter();
   const addItem = useCartStore((s) => s.addItem);
   const wishlist = useWishlistStore();
   const compare = useCompareStore();
@@ -49,6 +51,11 @@ export default function ProductCard({ product }: { product: IProduct }) {
       category: product.category,
     });
     setQty(1);
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    router.push("/checkout");
   };
 
   return (
@@ -200,6 +207,26 @@ export default function ProductCard({ product }: { product: IProduct }) {
             >
               <ShoppingCart className="w-3.5 h-3.5" />
               ADD
+            </button>
+          )}
+        </div>
+
+        <div className="mt-2">
+          {isOutOfStock ? (
+            <button
+              disabled
+              className="w-full inline-flex items-center justify-center gap-1.5 bg-charcoal-light/20 text-charcoal-light/50 text-xs font-semibold py-2.5 rounded-full cursor-not-allowed"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              BUY NOW
+            </button>
+          ) : (
+            <button
+              onClick={handleBuyNow}
+              className="w-full inline-flex items-center justify-center gap-1.5 bg-golden text-white text-xs font-semibold py-2.5 rounded-full hover:bg-golden-light transition-all hover:shadow-md"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              BUY NOW
             </button>
           )}
         </div>

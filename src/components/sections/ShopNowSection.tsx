@@ -14,7 +14,7 @@ export default function ShopNowSection({ products }: { products: IProduct[] }) {
               Fresh &amp; Ready
             </span>
             <h2 className="text-xl md:text-3xl lg:text-4xl font-display font-bold text-charcoal-dark mt-1">
-              Shop Now
+              Shop Your Favourites
             </h2>
             <p className="text-xs md:text-sm text-charcoal-light mt-1">
               Pick your favourites and get them delivered to your door.

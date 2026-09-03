@@ -5,8 +5,12 @@ export interface IHomepageDoc extends Document {
     heading: string;
     subheading: string;
     image: string;
+    imageMobile: string;
+    videoUrl: string;
+    videoUrlMobile: string;
     ctaText: string;
     ctaUrl: string;
+    badge: string;
   };
   announcementBar: {
     text: string;
@@ -57,6 +61,24 @@ export interface IHomepageDoc extends Document {
     title: string;
     description: string;
   }[];
+  founder: {
+    name: string;
+    designation: string;
+    story: string;
+    quote: string;
+    image: string;
+  };
+  policies: {
+    heading: string;
+    unboxingDisclaimer: string;
+    cancellationHeading: string;
+    cancellationText: string;
+    returnHeading: string;
+    returnText: string;
+    refundHeading: string;
+    refundText: string;
+    policyNote: string;
+  };
 }
 
 const HomepageSchema = new Schema<IHomepageDoc>(
@@ -65,8 +87,12 @@ const HomepageSchema = new Schema<IHomepageDoc>(
       heading: { type: String, default: "AUTHENTIC TASTE.\nMADE WITH LOVE." },
       subheading: { type: String, default: "Traditional homemade pickles crafted with care, packed fresh and delivered to your doorstep." },
       image: { type: String, default: "" },
+      imageMobile: { type: String, default: "" },
+      videoUrl: { type: String, default: "" },
+      videoUrlMobile: { type: String, default: "" },
       ctaText: { type: String, default: "SHOP PICKLES" },
       ctaUrl: { type: String, default: "/shop" },
+      badge: { type: String, default: "PURE. FRESH. HOMEMADE WITH LOVE." },
     },
     announcementBar: {
       text: { type: String, default: "AUTHENTIC HOMEMADE PICKLES • FRESHLY PREPARED • MADE WITH LOVE" },
@@ -123,6 +149,24 @@ const HomepageSchema = new Schema<IHomepageDoc>(
         description: { type: String, default: "" },
       },
     ],
+    founder: {
+      name: { type: String, default: "" },
+      designation: { type: String, default: "" },
+      story: { type: String, default: "" },
+      quote: { type: String, default: "" },
+      image: { type: String, default: "" },
+    },
+    policies: {
+      heading: { type: String, default: "ORDER POLICY" },
+      unboxingDisclaimer: { type: String, default: "Please record a continuous unboxing video while opening your package to help us verify any transit damage, missing items or order-related issues." },
+      cancellationHeading: { type: String, default: "NO CANCELLATION" },
+      cancellationText: { type: String, default: "Orders cannot be cancelled once processing or dispatch has started." },
+      returnHeading: { type: String, default: "NO RETURN" },
+      returnText: { type: String, default: "Food products are not eligible for return due to hygiene and food-safety considerations." },
+      refundHeading: { type: String, default: "NO REFUND" },
+      refundText: { type: String, default: "Refunds are provided only for approved cases such as damaged, missing or incorrect items as per the store policy." },
+      policyNote: { type: String, default: "Please review our complete policy before placing your order." },
+    },
   },
   { timestamps: true }
 );

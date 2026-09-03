@@ -21,9 +21,9 @@ export default function CategoryShowcase({ categories }: { categories: CategoryI
           <p className="section-subtitle">Find your favourite homemade delicacies.</p>
         </div>
 
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-8 max-w-5xl mx-auto">
+        <div className="flex md:grid items-stretch gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible md:grid-cols-4 lg:grid-cols-6 max-w-5xl mx-auto">
           {categories.map((cat) => (
-            <Link key={cat._id} href={`/shop/${cat.slug}`} className="group flex flex-col items-center text-center">
+            <Link key={cat._id} href={`/shop/${cat.slug}`} className="group flex flex-col items-center text-center snap-center shrink-0 w-24 sm:w-28 md:w-auto md:shrink">
               <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden bg-cream-dark/40 ring-4 ring-white shadow-md group-hover:shadow-xl group-hover:ring-golden/50 transition-all duration-300">
                 {cat.image ? (
                   <img
@@ -52,7 +52,7 @@ export default function CategoryShowcase({ categories }: { categories: CategoryI
           ))}
 
           {/* "Shop All" circle */}
-          <Link href="/shop" className="group flex flex-col items-center text-center">
+          <Link href="/shop" className="group flex flex-col items-center text-center snap-center shrink-0 w-24 sm:w-28 md:w-auto md:shrink">
             <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden bg-maroon text-white shadow-md group-hover:shadow-xl group-hover:bg-maroon-light flex items-center justify-center transition-all duration-300">
               <span className="font-display text-3xl md:text-4xl font-bold text-golden/80">+</span>
             </div>
