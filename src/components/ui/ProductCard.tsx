@@ -3,15 +3,17 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, ShoppingCart, Minus, Plus } from "lucide-react";
+import { Heart, ShoppingCart, Minus, Plus, Scale } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
+import { useCompareStore } from "@/store/compare";
 import { formatPrice } from "@/lib/utils";
 import type { IProduct } from "@/types";
 
 export default function ProductCard({ product }: { product: IProduct }) {
   const addItem = useCartStore((s) => s.addItem);
   const wishlist = useWishlistStore();
+  const compare = useCompareStore();
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [qty, setQty] = useState(1);
 
@@ -21,10 +23,14 @@ export default function ProductCard({ product }: { product: IProduct }) {
   const selected = activeVariants[selectedIdx] || activeVariants[0];
   const isOutOfStock = !selected || selected.stock <= 0;
   const isWishlisted = wishlist.has(product._id);
+  const isCompared = compare.has(product._id);
   const offerPct =
     selected?.compareAtPrice && selected.compareAtPrice > selected.price
       ? Math.round(((selected.compareAtPrice - selected.price) / selected.compareAtPrice) * 100)
       : 0;
+  const prices = activeVariants.map((v) => v.price).filter((n) => n != null);
+  const minPrice = prices.length ? Math.min(...prices) : 0;
+  const maxPrice = prices.length ? Math.max(...prices) : 0;
 
   const handleAddToCart = () => {
     if (!selected) return;
@@ -64,21 +70,45 @@ export default function ProductCard({ product }: { product: IProduct }) {
             </div>
           )}
 
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              wishlist.toggle(product._id);
-            }}
-            className={`absolute top-2.5 right-2.5 w-9 h-9 rounded-full flex items-center justify-center shadow-sm backdrop-blur transition-all duration-300 ${
-              isWishlisted
-                ? "bg-red text-white scale-110"
-                : "bg-white/90 text-charcoal-light hover:text-red hover:scale-110"
-            }`}
-            aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-          >
-            <Heart className={`w-4.5 h-4.5 ${isWishlisted ? "fill-current" : ""}`} />
-          </button>
+          <div className="absolute top-2.5 right-2.5 flex flex-col gap-1.5">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                wishlist.toggle(product._id);
+              }}
+              className={`w-9 h-9 rounded-full flex items-center justify-center shadow-sm backdrop-blur transition-all duration-300 ${
+                isWishlisted
+                  ? "bg-red text-white scale-110"
+                  : "bg-white/90 text-charcoal-light hover:text-red hover:scale-110"
+              }`}
+              aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            >
+              <Heart className={`w-4.5 h-4.5 ${isWishlisted ? "fill-current" : ""}`} />
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (compare.has(product._id)) {
+                  compare.remove(product._id);
+                } else if (compare.items.length >= 4) {
+                  window.alert("You can compare up to 4 products at a time.");
+                } else {
+                  compare.toggle(product._id);
+                }
+              }}
+              className={`w-9 h-9 rounded-full flex items-center justify-center shadow-sm backdrop-blur transition-all duration-300 ${
+                isCompared
+                  ? "bg-maroon text-white scale-110"
+                  : "bg-white/90 text-charcoal-light hover:text-maroon hover:scale-110"
+              }`}
+              aria-label={isCompared ? "Remove from compare" : "Add to compare"}
+              title="Compare"
+            >
+              <Scale className={`w-4.5 h-4.5 ${isCompared ? "fill-current" : ""}`} />
+            </button>
+          </div>
 
           <div className="absolute top-2.5 left-2.5 flex flex-col gap-1">
             {product.bestSeller && <span className="badge bg-red text-white">Best Seller</span>}
@@ -99,10 +129,16 @@ export default function ProductCard({ product }: { product: IProduct }) {
         </Link>
 
         <div className="flex items-baseline gap-2 mt-1.5">
-          <span className="font-bold text-maroon text-[15px] md:text-base">
-            {selected ? formatPrice(selected.price) : "Sold Out"}
-          </span>
-          {selected?.compareAtPrice && selected.compareAtPrice > selected.price && (
+          {activeVariants.length > 1 && maxPrice > minPrice ? (
+            <span className="font-bold text-maroon text-[15px] md:text-base">
+              {formatPrice(minPrice)} – {formatPrice(maxPrice)}
+            </span>
+          ) : (
+            <span className="font-bold text-maroon text-[15px] md:text-base">
+              {selected ? formatPrice(selected.price) : "Sold Out"}
+            </span>
+          )}
+          {activeVariants.length === 1 && selected?.compareAtPrice && selected.compareAtPrice > selected.price && (
             <span className="text-[11px] text-charcoal-light/50 line-through">
               {formatPrice(selected.compareAtPrice)}
             </span>

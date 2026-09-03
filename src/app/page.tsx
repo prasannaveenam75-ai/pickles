@@ -73,7 +73,6 @@ export default async function HomePage() {
         ctaText={hc.hero?.ctaText || "SHOP PICKLES"}
         ctaUrl={hc.hero?.ctaUrl || "/shop"}
       />
-      <TrustStrip items={hc.trustItems} />
       <CategoryShowcase
         categories={categories?.filter((c: any) => !c.parent).map((c: any) => ({
           _id: c._id?.toString(),
@@ -84,7 +83,17 @@ export default async function HomePage() {
           productCount: productsByCategory?.[c.name] || 0,
         }))}
       />
+      <TrustStrip items={hc.trustItems} />
       <BestSellers products={serialize(bestSellers)} />
+      {writtenTestimonials.length > 0 && (
+        <TestimonialsSection testimonials={serialize(writtenTestimonials)} />
+      )}
+      <WhyChooseUs title={hc.whyChooseUs?.title} items={hc.whyChooseUs?.items} />
+      <StorySection
+        title={hc.storySection?.title || "TRADITION IN EVERY JAR"}
+        text={hc.storySection?.text || "At Devi Pickles, every jar carries the warmth of traditional homemade cooking."}
+        image={hc.storySection?.image || ""}
+      />
       {nonVegProducts.length > 0 && (
         <SnacksSection products={serialize(nonVegProducts)} title="PREMIUM NON-VEG PICKLES" subtitle="Rich, fiery and prepared the traditional way with the finest ingredients." />
       )}
@@ -94,19 +103,10 @@ export default async function HomePage() {
       {seasonalProducts.length > 0 && (
         <SeasonalSection products={serialize(seasonalProducts)} />
       )}
-      <StorySection
-        title={hc.storySection?.title || "TRADITION IN EVERY JAR"}
-        text={hc.storySection?.text || "At Devi Pickles, every jar carries the warmth of traditional homemade cooking."}
-        image={hc.storySection?.image || ""}
-      />
-      <WhyChooseUs title={hc.whyChooseUs?.title} items={hc.whyChooseUs?.items} />
       {featured.length > 0 && (
         <FeaturedProducts products={serialize(featured)} />
       )}
       <PickleExperience steps={hc.experienceSteps} />
-      {writtenTestimonials.length > 0 && (
-        <TestimonialsSection testimonials={serialize(writtenTestimonials)} />
-      )}
       {videoTestimonials.length > 0 && (
         <VideoTestimonialsSection
           videos={serialize(videoTestimonials)}

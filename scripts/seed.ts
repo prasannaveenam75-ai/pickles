@@ -9,6 +9,12 @@ const categories = [
   { name: "Veg Pickles", slug: "veg-pickles", description: "Traditional vegetarian pickles made with authentic home recipes, sun-cured spices and the finest ingredients.", image: PX(35267279), displayOrder: 1, active: true, seasonal: false, seoTitle: "Veg Pickles | Buy Online | Devi Pickles", seoDescription: "Shop authentic homemade vegetarian pickles - usiri, tomato, pandumirchi, lemon, avakai, gongura and more." },
   { name: "Non-Veg Pickles", slug: "non-veg-pickles", description: "Rich, flavourful non-vegetarian pickles prepared the traditional way with slow-cooked spices.", image: PX(35532821), displayOrder: 2, active: true, seasonal: false, seoTitle: "Non-Veg Pickles | Buy Online | Devi Pickles", seoDescription: "Authentic chicken, mutton and prawn pickles made with traditional Andhra-style recipes." },
   { name: "Powders", slug: "powders", description: "Authentic spice powders and podis crafted by dry-roasting whole spices the traditional way.", image: PX(7208238), displayOrder: 3, active: true, seasonal: false, seoTitle: "Powders & Podis | Buy Online | Devi Pickles", seoDescription: "Traditional Andhra kura kaaram and pappula podi made from hand-roasted spices." },
+  { name: "Spices", slug: "spices", description: "Whole and ground spices, dry-roasted and freshly milled for maximum flavour.", image: PX(7208238), displayOrder: 4, active: true, seasonal: false, seoTitle: "Spices | Buy Online | Devi Pickles", seoDescription: "Traditional Andhra spices and masalas made from hand-roasted, freshly ground spices." },
+  { name: "Healthy Snacks", slug: "healthy-snacks", description: "Wholesome, traditional healthy snacks made with natural ingredients.", image: PX(38521742), displayOrder: 5, active: true, seasonal: false, seoTitle: "Healthy Snacks | Buy Online | Devi Pickles", seoDescription: "Traditional homemade healthy snacks and laddus from Devi Pickles." },
+  { name: "Sweets", slug: "sweets", description: "Traditional Indian sweets made with pure ghee, jaggery and premium ingredients.", image: PX(11584813), displayOrder: 6, active: true, seasonal: false, seoTitle: "Sweets | Buy Online | Devi Pickles", seoDescription: "Authentic homemade sweets and laddus from Devi Pickles." },
+  { name: "Hots", slug: "hots", description: "Fiery, spicy treats for those who love heat and bold flavours.", image: PX(38857376), displayOrder: 7, active: true, seasonal: false, seoTitle: "Hots | Buy Online | Devi Pickles", seoDescription: "Bold, spicy and fiery snacks and pickles from Devi Pickles." },
+  { name: "Newly Added", slug: "newly-added", description: "Our latest additions — freshly crafted and ready to enjoy.", image: PX(9164642), displayOrder: 8, active: true, seasonal: false, seoTitle: "Newly Added | Devi Pickles", seoDescription: "Newly added homemade pickles, snacks, sweets and powders from Devi Pickles." },
+  { name: "Shop All", slug: "shop-all", description: "Browse the complete collection of Devi Pickles homemade delicacies.", image: PX(1516382901417), displayOrder: 9, active: true, seasonal: false, seoTitle: "Shop All | Devi Pickles", seoDescription: "Shop the entire Devi Pickles range - pickles, snacks, sweets, spices and powders." },
 ];
 
 type VariantSeed = { name: string; weight: string; weightInGrams: number; price: number; compareAtPrice: number; stock: number };
@@ -412,6 +418,14 @@ const products: ProductSeed[] = [
   },
 ];
 
+// Match reference site: every product carries 250 Grms / 500 Grms / 1 kg variants
+for (const product of products) {
+  const p500 = product.variants.find((v) => v.weightInGrams === 500);
+  if (p500) {
+    product.variants.unshift(V("250 g", "250g", 250, Math.round(p500.price / 2), Math.round((p500.compareAtPrice ?? p500.price) / 2)));
+  }
+}
+
 const homepageContent = {
   hero: {
     heading: "DEVI PICKLES — SWAD JO DIL JEET LE!",
@@ -421,14 +435,13 @@ const homepageContent = {
     ctaUrl: "/shop",
   },
   announcementBar: {
-    text: "DEVI PICKLES • SWAD JO DIL JEET LE! • AUTHENTIC HOMEMADE PICKLES • HANDCRAFTED SPICE POWDERS",
+    text: "Worldwide Shipping Available • Click here to order internationally or WhatsApp us. • 🎉 Free Shipping above Rs.999 for AP & Telangana 🎉",
     active: true,
   },
   trustItems: [
-    { icon: "leaf", title: "100% NATURAL", description: "Made with natural ingredients, nothing artificial." },
-    { icon: "shield", title: "NO ARTIFICIAL COLOURS", description: "Authentic colour comes from real ingredients." },
-    { icon: "heart", title: "HOMEMADE TASTE", description: "Prepared with traditional recipes and a lot of care." },
-    { icon: "check", title: "HYGIENICALLY PREPARED", description: "Made and packed to the highest standards of hygiene." },
+    { icon: "leaf", title: "No Palm Oil", description: "Prepared with healthy, natural oils." },
+    { icon: "shield", title: "No Preservatives", description: "Pure, freshly made goodness." },
+    { icon: "check", title: "No Added Colors", description: "Natural colour from real ingredients." },
   ],
   storySection: {
     title: "TRADITION IN EVERY JAR",

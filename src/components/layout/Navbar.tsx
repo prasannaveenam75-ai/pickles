@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useCartStore } from "@/store/cart";
-import { ShoppingCart, Search, Menu, X, ChevronDown, ChevronRight, ArrowRight } from "lucide-react";
+import { ShoppingCart, Search, Menu, X, ChevronDown, ChevronRight, ArrowRight, Scale, User } from "lucide-react";
+import { useCompareStore } from "@/store/compare";
 
 interface NavCategory {
   _id: string;
@@ -24,6 +25,7 @@ export default function Navbar() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searching, setSearching] = useState(false);
   const itemCount = useCartStore((s) => s.getItemCount());
+  const compareCount = useCompareStore((s) => s.items.length);
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -119,66 +121,42 @@ export default function Navbar() {
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-1 mx-8">
-              {[
-                { href: "/", label: "Home" },
-                { href: "/shop", label: "Shop" },
-                { href: "/about", label: "About" },
-                { href: "/contact", label: "Contact" },
-              ].map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="px-3 py-2 text-sm font-medium text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-all"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div
-                className="relative"
-                onMouseEnter={() => setCategoriesOpen(true)}
-                onMouseLeave={() => setCategoriesOpen(false)}
+              <Link
+                href="/"
+                className="px-3 py-2 text-sm font-medium text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-all"
               >
-                <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-all">
-                  Categories <ChevronDown className={`w-3 h-3 transition-transform ${categoriesOpen ? "rotate-180" : ""}`} />
-                </button>
-                {categoriesOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-sand-dark/20 py-2 animate-fade-in z-50">
-                    {topLevel.map((cat) => {
-                      const children = getChildren(cat._id);
-                      return (
-                        <div key={cat._id}>
-                          <Link
-                            href={`/shop/${cat.slug}`}
-                            className="flex items-center justify-between px-4 py-2.5 text-sm text-charcoal hover:bg-cream hover:text-maroon transition-colors font-medium"
-                            onClick={() => setCategoriesOpen(false)}
-                          >
-                            {cat.name}
-                            {children.length > 0 && <ChevronRight className="w-3 h-3" />}
-                          </Link>
-                          {children.length > 0 && (
-                            <div className="pl-6 pb-1">
-                              {children.map((child) => (
-                                <Link
-                                  key={child._id}
-                                  href={`/shop/${child.slug}`}
-                                  className="block px-4 py-1.5 text-xs text-charcoal-light hover:text-maroon transition-colors"
-                                  onClick={() => setCategoriesOpen(false)}
-                                >
-                                  {child.name}
-                                </Link>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+                Home
+              </Link>
+              <Link
+                href="/shop"
+                className="px-3 py-2 text-sm font-medium text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-all"
+              >
+                Shop All
+              </Link>
+              {topLevel
+                .filter((c) => c.slug !== "shop-all")
+                .map((cat) => (
+                  <Link
+                    key={cat._id}
+                    href={cat.slug === "shop-all" ? "/shop" : `/shop/${cat.slug}`}
+                    className="px-3 py-2 text-sm font-medium text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-all whitespace-nowrap"
+                  >
+                    {cat.name === "Non-Veg Pickles" ? "Non-Veg Pickles" : cat.name}
+                  </Link>
+                ))}
+              <Link
+                href="/about"
+                className="px-3 py-2 text-sm font-medium text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-all"
+              >
+                About Us
+              </Link>
             </nav>
 
             {/* Right icons */}
             <div className="flex items-center gap-1 md:gap-2">
+              <Link href="/account" className="p-2 text-white/80 hover:text-white transition-colors" aria-label="My Account">
+                <User className="w-5 h-5" />
+              </Link>
               <button
                 onClick={() => setSearchOpen(true)}
                 className="p-2 text-white/80 hover:text-white transition-colors"
@@ -186,6 +164,14 @@ export default function Navbar() {
               >
                 <Search className="w-5 h-5" />
               </button>
+              <Link href="/compare" className="relative p-2 text-white/80 hover:text-white transition-colors" aria-label="Compare">
+                <Scale className="w-5 h-5" />
+                {compareCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 bg-golden text-white text-[9px] font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center">
+                    {compareCount > 9 ? "9+" : compareCount}
+                  </span>
+                )}
+              </Link>
               <Link href="/cart" className="relative p-2 text-white/80 hover:text-white transition-colors" aria-label="Cart">
                 <ShoppingCart className="w-5 h-5" />
                 {itemCount > 0 && (
@@ -296,7 +282,9 @@ export default function Navbar() {
                 {[
                   { href: "/", label: "Home" },
                   { href: "/shop", label: "Shop All" },
+                  { href: "/compare", label: "Compare" },
                   { href: "/track-order", label: "Track Order" },
+                  { href: "/account", label: "My Account" },
                   { href: "/about", label: "About Us" },
                   { href: "/contact", label: "Contact" },
                 ].map((link) => (

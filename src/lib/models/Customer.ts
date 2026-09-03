@@ -4,6 +4,7 @@ export interface ICustomerDoc extends Document {
   name: string;
   phone: string;
   email: string;
+  passwordHash?: string;
   totalOrders: number;
   totalSpent: number;
   createdAt: Date;
@@ -15,6 +16,7 @@ const CustomerSchema = new Schema<ICustomerDoc>(
     name: { type: String, required: true, trim: true },
     phone: { type: String, required: true, trim: true },
     email: { type: String, required: true, lowercase: true, trim: true },
+    passwordHash: { type: String, select: false },
     totalOrders: { type: Number, default: 0 },
     totalSpent: { type: Number, default: 0 },
   },
@@ -22,6 +24,6 @@ const CustomerSchema = new Schema<ICustomerDoc>(
 );
 
 CustomerSchema.index({ phone: 1 });
-CustomerSchema.index({ email: 1 });
+CustomerSchema.index({ email: 1 }, { unique: true });
 
 export default mongoose.models.Customer || mongoose.model<ICustomerDoc>("Customer", CustomerSchema);

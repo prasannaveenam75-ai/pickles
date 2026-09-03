@@ -24,8 +24,8 @@
   --color-sand: #F6DEB8;
   --color-sand-light: #FAF0DC;
   --color-sand-dark: #E0C89A;
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --font-display: "Signika", Arial, Helvetica, sans-serif;
+  --font-body: "Lato", system-ui, sans-serif;
 }
 
 @layer base {

@@ -35,7 +35,16 @@ export function getTokenFromRequest(request: Request): string | null {
   }
   const cookieHeader = request.headers.get("cookie");
   if (cookieHeader) {
-    const tokenMatch = cookieHeader.match(/admin-token=([^;]+)/);
+    const tokenMatch = cookieHeader.match(/(?:admin-token|customer-token)=([^;]+)/);
+    if (tokenMatch) return tokenMatch[1];
+  }
+  return null;
+}
+
+export function getCustomerTokenFromRequest(request: Request): string | null {
+  const cookieHeader = request.headers.get("cookie");
+  if (cookieHeader) {
+    const tokenMatch = cookieHeader.match(/customer-token=([^;]+)/);
     if (tokenMatch) return tokenMatch[1];
   }
   return null;
